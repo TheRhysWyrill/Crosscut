@@ -1,0 +1,26 @@
+name: Feature request
+description: Something CrossCut should do, or do faster.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do, and where does CrossCut get in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you have in mind
+      description: A rough idea is fine. Screenshots of another tool are welcome.
+    validations:
+      required: false
+  - type: input
+    id: scale
+    attributes:
+      label: How big are the files involved?
+      description: CrossCut is built for long recordings, so the answer changes the design.
+      placeholder: 25 hour, 80 GB MKV per stream session
+    validations:
+      required: false

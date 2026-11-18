@@ -1,0 +1,89 @@
+{
+  "name": "crosscut",
+  "productName": "CrossCut",
+  "private": true,
+  "version": "1.1.0",
+  "description": "Lossless video cutting and batch encoding",
+  "author": "Rhys Wyrill",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheRhysWyrill/Crosscut.git"
+  },
+  "homepage": "https://github.com/TheRhysWyrill/Crosscut",
+  "bugs": {
+    "url": "https://github.com/TheRhysWyrill/Crosscut/issues"
+  },
+  "type": "module",
+  "main": "electron/main.mjs",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "ffmpeg": "node scripts/fetch-ffmpeg.mjs",
+    "qr": "node scripts/make-qr.mjs",
+    "build": "vite build",
+    "app": "npm run build && electron .",
+    "package": "npm run ffmpeg && npm run build && node scripts/package-local.mjs",
+    "dist": "npm run ffmpeg && npm run build && electron-builder --win --publish never -c.extraMetadata.supportPrompt=true && node scripts/prune-release.mjs",
+    "server": "node server/index.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "build": {
+    "appId": "com.crosscut.app",
+    "productName": "CrossCut",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "server/**/*",
+      "build/icon.png",
+      "THIRD-PARTY-NOTICES.md",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "vendor/ffmpeg/win32-x64",
+        "to": "ffmpeg"
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "CrossCut-${version}-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "deleteAppDataOnUninstall": false
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "TheRhysWyrill",
+        "repo": "Crosscut"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11",
+    "express": "^4.21.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "qrcode": "^1.5.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7"
+  }
+}

@@ -1,0 +1,58 @@
+name: Bug report
+description: Something went wrong while cutting, exporting or opening a file.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. A job log makes fixes much faster: open the queue,
+        press `≡` on the failed job and paste the last ~40 lines.
+  - type: input
+    id: version
+    attributes:
+      label: CrossCut version
+      description: Shown in the About panel (click the logo) and in Settings.
+      placeholder: 1.1.0
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source file
+      description: Container, codecs, resolution, frame rate and length of the input. File names can be redacted.
+      placeholder: MKV, HEVC 10-bit + AAC 2ch, 1080p59.94, 6h12m
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Cut mode
+      options:
+        - Lossless copy
+        - Smart render
+        - Re-encode
+        - Not an export problem
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected, what you got, and whether the output file plays.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Job log
+      description: Queue row → ≡ → copy the last lines. Remove anything private first.
+      render: shell
+    validations:
+      required: false
+  - type: input
+    id: system
+    attributes:
+      label: Windows version and drive
+      placeholder: Windows 11 23H2, footage on an external USB SSD
+    validations:
+      required: false

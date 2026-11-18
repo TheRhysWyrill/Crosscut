@@ -1,0 +1,99 @@
+name: Release
+
+# Every push to main builds the installer on a clean runner and, when the checks
+# pass, publishes it as a real release tagged with the version in package.json.
+# The tag is moved to the commit that passed, so the download always matches the
+# code that was tested. A pushed v* tag still builds and publishes that tag.
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Download FFmpeg
+        run: npm run ffmpeg
+
+      - name: Build installer
+        run: npm run dist
+        env:
+          # Set these two repository secrets to sign the installer. Without them
+          # the build still succeeds, but Windows shows a SmartScreen warning.
+          CSC_LINK: ${{ secrets.WINDOWS_CERT_PFX }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          Get-FileHash release\CrossCut-*-setup.exe -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash.ToLower())  $(Split-Path $_.Path -Leaf)" } |
+            Set-Content release\SHA256SUMS.txt
+          Get-Content release\SHA256SUMS.txt
+
+      - name: Release tag
+        id: release
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $tag = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME } else { "v$version" }
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: crosscut-installer
+          path: |
+            release/CrossCut-*-setup.exe
+            release/CrossCut-*-setup.exe.blockmap
+            release/latest.yml
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+
+      - name: Point the release tag at this commit
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          git tag -f "$TAG" "$GITHUB_SHA"
+          git push -f origin "refs/tags/$TAG"
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release.outputs.tag }}
+          name: CrossCut ${{ steps.release.outputs.tag }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            release/CrossCut-*-setup.exe
+            release/CrossCut-*-setup.exe.blockmap
+            release/latest.yml
+            release/SHA256SUMS.txt

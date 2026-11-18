@@ -1,0 +1,205 @@
+/* About and donation cards */
+.brand-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+}
+
+.brand-btn:hover .brand-mark {
+  filter: brightness(1.1);
+  box-shadow: 0 2px 16px rgba(240, 163, 60, 0.45);
+}
+
+.brand-btn:hover .brand-sub {
+  color: var(--dim);
+}
+
+.brand-btn:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.about-update {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.warn-text {
+  color: #f0a33c;
+}
+
+.quit-busy .quit-mark {
+  font-size: 26px;
+  opacity: 1;
+}
+
+/* Shortcut reference and the first-run walkthrough, same shell as About. */
+.shortcuts-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: 26px;
+  align-items: start;
+}
+
+.shortcut-steps {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shortcut-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.5;
+}
+
+.shortcut-steps strong {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.shortcut-keys {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-left: 1px solid var(--line, #23262d);
+  padding-left: 20px;
+}
+
+.shortcut-row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  font-size: 12.5px;
+}
+
+.shortcut-row span {
+  color: var(--muted, #9aa1ad);
+  line-height: 1.4;
+}
+
+.shortcut-row kbd {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11.5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line, #23262d);
+  border-radius: 5px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 980px) {
+  .shortcuts-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shortcut-keys {
+    border-left: 0;
+    border-top: 1px solid var(--line, #23262d);
+    padding: 16px 0 0;
+  }
+}
+
+.about-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  gap: 22px;
+  align-items: start;
+}
+
+.about-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.about-copy p {
+  margin: 0;
+}
+
+.about-list {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--dim);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.donate-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-2);
+  text-align: center;
+}
+
+.donate-title {
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-wrap: balance;
+}
+
+.donate-qr {
+  width: 176px;
+  height: 176px;
+  border-radius: 7px;
+  background: #fff;
+  padding: 7px;
+  display: block;
+}
+
+.quit {
+  width: min(430px, 92vw);
+}
+
+.quit-body {
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding-top: 22px;
+}
+
+.quit-body h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.quit-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 19px;
+}
+
+.quit-foot {
+  justify-content: center;
+}
